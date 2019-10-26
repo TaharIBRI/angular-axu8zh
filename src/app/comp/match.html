@@ -1,0 +1,74 @@
+<div class="mb-5" *ngFor="let key of objectKey(newMatches)">
+  <div class="text-center">
+    <h3>{{getMatchDayPeriod(newMatches[key])}}</h3>
+  </div>
+  <div class="row justify-content-center">
+    <div class="p-3 position-relative float-left" *ngFor="let m of newMatches[key]" style="width: 300px;">
+      <table class="table table-sm table-active bg-light border" style="margin: 0;">
+        <tbody>
+          <tr>
+            <td class="text-center align-middle border-right" rowspan="2" style="width: 14%;"
+              [ngClass]="getMatchStatusClass(m)">{{getMatchStatus(m)}}</td>
+            <td [ngClass]=" getWinnerColor(m, 'home')"><img src="{{m.home.logo}}" style="height: 22px; width: 22px">
+              {{m.home.name.brief ? m.home.name.brief : m.home.name.full }}
+              <strong>{{m.status === 'prematch' ? '' : m.home.score.total}}</strong>
+              <div *ngIf="m.home.stats?.cards_red.total > 0;" >
+                <span *ngFor="let card of newArray(m.home.stats.cards_red.total)" style="vertical-align: top; padding-left: 3px">
+                <img class="align-top"
+                  src="https://secure.widget.cloud.opta.net/v3/assets/images/icons/football_events/icon-Red.svg">
+              </span>
+            </div>
+            </td>
+            <td class="text-right" [ngClass]=" getWinnerColor(m, 'home')" style="width: 14%;">25%</td>
+            <td class="text-center align-middle border-left" [ngClass]=" getWinnerColor(m, 'draw')" rowspan="2"
+              style="width: 14%;">30%
+            </td>
+          </tr>
+          <tr>
+            <td [ngClass]=" getWinnerColor(m, 'away')"><img src="{{m.away.logo}}" style="height: 22px; width: 22px">
+              {{m.away.name.brief ? m.away.name.brief : m.away.name.full }}
+              <strong>{{m.status === 'prematch' ? '' : m.away.score.total}}</strong>
+              <span *ngIf="m.away.stats?.cards_red.total > 0" style="vertical-align: top; padding-left: 3px">
+                <img class="align-top"
+                  src="https://secure.widget.cloud.opta.net/v3/assets/images/icons/football_events/icon-Red.svg">
+              </span>
+            </td>
+            <td class="text-right" [ngClass]=" getWinnerColor(m, 'away')" style="width: 14%;">45%</td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="!m.home.stats">
+        <i class="material-icons" type="button" (click)="getMatchesStats(m);">control_point</i>
+      </div>
+      <div class="border border-top-0" *ngIf="m.home.stats">
+        <table class="table table-sm mx-auto text-muted" style="margin: 0; max-width: 90%;">
+          <tabset class="small m-0 p-0">
+            <tab *ngFor="let p of periods, let i=index" [heading]="p.name" id="i"
+              [active]="m.period === p.period ? true : false">
+              <tbody>
+                <tr>
+                  <td class="border-top-0"></td>
+                  <td class="small border-top-0 text-right" *ngIf="m">{{m.home.name.abbr}}</td>
+                  <td class="small border-top-0 text-right" *ngIf="m">{{m.away.name.abbr}}</td>
+                </tr>
+                <tr *ngFor="let item of stat">
+                  <td class="small">{{TRANS[item[0].toString()] ? TRANS[item[0].toString()] : item[0].toString()}}
+                      <i *ngIf="item[3]" class="material-icons" data-toggle="modal"
+                      data-target="#myModal" style="font-size: 18px; vertical-align: middle;">
+                          info
+                          </i>
+
+
+                  </td>
+                  <td *ngFor="let s of side" [ngClass]="getOnFireColor(m, item ,s , p.name)" class="small text-right">
+                    {{this.getItem1(m,item, s, p.name)}} {{ this.getItem2(m, item, s ,p.name)}}
+                  </td>
+                </tr>
+              </tbody>
+            </tab>
+          </tabset>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
