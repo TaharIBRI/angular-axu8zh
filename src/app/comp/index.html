@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OptaApp</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://secure.widget.cloud.opta.net/v3/v3.opta-widgets.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+</head>
+<body>
+  <app-root></app-root>
+<script>
+    intercept(Opta, 'Subscriptions', function(Subscriptions) {
+        // tslint:disable-next-line:only-arrow-functions
+        Subscriptions.isPermittedDomain = () => { return true};
+        // tslint:disable-next-line:only-arrow-functions
+        intercept(Subscriptions, 'feeds', (feeds) => {
+            const t = Opta.Trans.loadTerms({
+                term_set_id: Opta.Trans.mapSportIdToTerms(1)
+            });
+            // tslint:disable-next-line:no-unused-expression
+            Opta.when(t).done();
+        });
+
+    });
+      function intercept(obj, prop, callback) {
+        let oldVal = null;
+        Object.defineProperty(
+            obj, prop,
+            // tslint:disable-next-line:only-arrow-functions
+            {get() {
+                    return oldVal;
+                },
+                set(newVal) {
+                    callback.call(this, newVal);
+                    oldVal = newVal;
+                },
+                enumerable: true,
+                configurable: true
+            }
+        );
+    }
+
+    opta_settings = {
+        subscription_id: '978d5d7e1501e56a5e0b49e800ca7d65',
+        language: 'fr_FR', // other possible values: 'es_ES', 'de_DE', etc.
+        timezone: 'Europe/Paris'
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col">
+    <h2>Competitions</h2>
+    <div *ngIf="tournaments && tournaments?.length > 0">Num Competitions: {{tournaments.length}}</div>
+    <p *ngIf="tournaments?.length == 0"> Loading ...</p>
+    <div class="row">
+      <div class="col-sm-4 form-group" *ngIf="tournaments?.length > 0">
+        <select class="browser-default custom-select" id="tournaments" name="tournaments"
+          [(ngModel)]="tournamentSelected" (ngModelChange)="onCompSelected($event)">
+          <optgroup *ngFor="let newTrn of newTournamentKeys" [label]="newTrn">
+            <option *ngFor="let trn of newTournaments[newTrn]" [ngValue]="trn.id" [id]="trn.id">
+              {{trn.country}} - {{trn.name}}</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="col-sm-1">
+        <input [ngModel]="seasonId" (ngModelChange)="seasonId = $event" type="text" class="form-control"
+          placeholder="SEASON ID" aria-label="SEASON ID" aria-describedby="basic-addon2">
+      </div>
+      <div class="col-sm-1">
+        <button class="btn btn-dark" type="button" (click)="onGetMatches('all')">Finished</button>
+      </div>
+      <div class="col-sm-1">
+        <button class="btn btn-outline-danger" type="button" (click)="onGetMatches('live')">Live</button>
+      </div>
+      <div class="col-sm-1">
+        <button class="btn btn-outline-secondary" type="button" (click)="onGetMatches('pre')">Pre</button>
+      </div>
+
+      <br>
+      {{competitionId}} {{seasonId}}
+    </div>
+    <div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Modal Heading</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            Modal body..
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <app-matches *ngIf="matches?.length>0"></app-matches>
+    </div>
+  </div>
+</div>
